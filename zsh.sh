@@ -1,10 +1,5 @@
 #!/usr/bin/env sh
 
-if [ -e /bin/zsh ]
-then
-    exec /bin/zsh "$@"
-fi
-
 CDIR="$(cd "$(dirname "$0")" && pwd)"
 
 zshbin='zsh-bin'
@@ -30,4 +25,10 @@ export PATH=$CDIR/$zshbin/bin:$PATH
 export SAVEHIST=10000
 export HISTFILE=$XDG_DATA_HOME/zsh/history
 
-exec $CDIR/$zshbin/bin/zsh "$@"
+
+if [ -e /bin/zsh ]
+then
+    /bin/zsh "$@"
+else
+    $CDIR/$zshbin/bin/zsh "$@"
+fi
