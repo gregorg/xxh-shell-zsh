@@ -1,5 +1,10 @@
 #!/usr/bin/env sh
 
+if command -v zsh >/dev/null
+then
+    exec zsh
+fi
+
 CDIR="$(cd "$(dirname "$0")" && pwd)"
 
 zshbin='zsh-bin'
@@ -25,4 +30,4 @@ export PATH=$CDIR/$zshbin/bin:$PATH
 export SAVEHIST=10000
 export HISTFILE=$XDG_DATA_HOME/zsh/history
 
-$CDIR/$zshbin/bin/zsh "$@"
+exec $CDIR/$zshbin/bin/zsh "$@"
