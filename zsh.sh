@@ -26,10 +26,9 @@ export SAVEHIST=10000
 export HISTFILE=$XDG_DATA_HOME/zsh/history
 
 
-#if [ -e /bin/zsh ]
-#then
-#    /bin/zsh "$@"
-#else
-#    $CDIR/$zshbin/bin/zsh "$@"
-#fi
-$CDIR/$zshbin/bin/zsh "$@"
+if [ -e /bin/zsh ]
+then
+    /bin/zsh "$@"
+else
+    $CDIR/$zshbin/bin/zsh "$@"
+fi
