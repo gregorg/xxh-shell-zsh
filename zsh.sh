@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
-if command -v zsh >/dev/null
+if [ -e /bin/zsh ]
 then
-    exec zsh
+    exec /bin/zsh "$@"
 fi
 
 CDIR="$(cd "$(dirname "$0")" && pwd)"
