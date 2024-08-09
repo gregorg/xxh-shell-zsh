@@ -34,7 +34,7 @@ cd $build_dir/zsh-bin
 
 [ $QUIET ] && arg_q='-q' || arg_q=''
 [ $QUIET ] && arg_s='-s' || arg_s=''
-[ $QUIET ] && arg_progress='' || arg_progress='--show-progress'
+[ $QUIET ] && arg_progress='' || arg_progress='--progress bar'
 
 if [ -x "$(command -v wget)" ]; then
   wget $arg_q $arg_progress $url -O $tarname
