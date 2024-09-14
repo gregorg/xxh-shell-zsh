@@ -57,6 +57,8 @@ for env in "${ENV[@]}"; do
   name="$( cut -d '=' -f 1 <<< "$env" )";
   val="$( cut -d '=' -f 2- <<< "$env" )";
   val=`echo $val | base64 -d`
+  # explicitly expand parameters
+  val=$(eval "echo \"$val\"")
 
   if [[ $XXH_VERBOSE == '1' || $XXH_VERBOSE == '2' ]]; then
     echo Entrypoint env: raw="$env", name=$name, value=$val
