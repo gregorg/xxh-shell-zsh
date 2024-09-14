@@ -31,6 +31,47 @@ if [[ $VERBOSE != '' ]]; then
   export XXH_VERBOSE=$VERBOSE
 fi
 
+CURRENT_DIR="$(cd "$(dirname "$0")" && pwd)"
+export XXH_HOME=`readlink -f $CURRENT_DIR/../../../..`
+
+if [[ ! -d $XXH_HOME/.local/share/zsh ]]; then
+  mkdir -p $XXH_HOME/.local/share/zsh
+fi
+
+if [[ $HOMEPATH != '' ]]; then
+  homerealpath=`readlink -f $HOMEPATH`
+  if [[ -d $homerealpath ]]; then
+    export HOME=$homerealpath
+  else
+    echo "Home path not found: $homerealpath"
+    echo "Set HOME to $XXH_HOME"
+    export HOME=$XXH_HOME
+  fi
+else
+  export HOME=$XXH_HOME
+fi
+
+if [[ $XDGPATH != '' ]]; then
+  xdgrealpath=`readlink -f $XDGPATH`
+  if [[ ! -d $xdgrealpath ]]; then
+    echo "XDG path not found: $xdgrealpath"
+    echo "Set XDG path to $XXH_HOME"
+    export XDGPATH=$XXH_HOME
+  fi
+else
+  export XDGPATH=$XXH_HOME
+fi
+
+
+export XXH_SHELL=zsh
+export XDG_CONFIG_HOME=$XDGPATH/.config
+export XDG_DATA_HOME=$XDGPATH/.local/share
+export XDG_CACHE_HOME=$XDGPATH/.cache
+export XAUTHORITY=/home/$USER/.Xauthority
+export TMPDIR=$XDG_CACHE_HOME/tmp
+export TEMP=$TMPDIR
+mkdir -p $TMPDIR
+
 if [[ $EXECUTE_COMMAND ]]; then
   if [[ $XXH_VERBOSE == '1' || $XXH_VERBOSE == '2' ]]; then
     echo Execute command: $EXECUTE_COMMAND
@@ -76,7 +117,6 @@ for eb in "${EBASH[@]}"; do
   eval $bash_command
 done
 
-CURRENT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd $CURRENT_DIR
 
 # Check
@@ -89,46 +129,6 @@ if [[ ! -f .entrypoint-check-done ]]; then
     echo $check_result > .entrypoint-check-done
   fi
 fi
-
-export XXH_HOME=`readlink -f $CURRENT_DIR/../../../..`
-
-if [[ ! -d $XXH_HOME/.local/share/zsh ]]; then
-  mkdir -p $XXH_HOME/.local/share/zsh
-fi
-
-if [[ $HOMEPATH != '' ]]; then
-  homerealpath=`readlink -f $HOMEPATH`
-  if [[ -d $homerealpath ]]; then
-    export HOME=$homerealpath
-  else
-    echo "Home path not found: $homerealpath"
-    echo "Set HOME to $XXH_HOME"
-    export HOME=$XXH_HOME
-  fi
-else
-  export HOME=$XXH_HOME
-fi
-
-if [[ $XDGPATH != '' ]]; then
-  xdgrealpath=`readlink -f $XDGPATH`
-  if [[ ! -d $xdgrealpath ]]; then
-    echo "XDG path not found: $xdgrealpath"
-    echo "Set XDG path to $XXH_HOME"
-    export XDGPATH=$XXH_HOME
-  fi
-else
-  export XDGPATH=$XXH_HOME
-fi
-
-
-export XXH_SHELL=zsh
-export XDG_CONFIG_HOME=$XDGPATH/.config
-export XDG_DATA_HOME=$XDGPATH/.local/share
-export XDG_CACHE_HOME=$XDGPATH/.cache
-export XAUTHORITY=/home/$USER/.Xauthority
-export TMPDIR=$XDG_CACHE_HOME/tmp
-export TEMP=$TMPDIR
-mkdir -p $TMPDIR
 
 for pluginrc_file in $(find $CURRENT_DIR/../../../plugins/xxh-plugin-*/build -type f -name '*prerun.sh' -printf '%f\t%p\n' 2>/dev/null | sort -k1 | cut -f2); do
   if [[ -f $pluginrc_file ]]; then
