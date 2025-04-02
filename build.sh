@@ -28,12 +28,12 @@ tag=v3.0.1
 arch=$(uname -m)
 if [[ $arch == x86_64* ]]; then
 	distfile=zsh-5.8-linux-x86_64
-elif  [[ $arch == arm* ]]; then
+elif [[ $arch == arm* ]]; then
 	distfile=zsh-5.8-linux-armv7l
 fi
 
-url="https://github.com/romkatv/zsh-bin/releases/download/$tag/$distfile.tar.gz"
 
+url="https://github.com/romkatv/zsh-bin/releases/download/$tag/$distfile.tar.gz"
 tarname=`basename $url`
 
 cd $build_dir/zsh-bin
@@ -51,5 +51,10 @@ else
 fi
 
 tar -xzf $tarname
-mv $tarname/* .
+if [[ $arch == x86_64* ]]; then
+mv zsh-5.8-linux-x86_64/* .
+elif  [[ $arch == arm* ]]; then
+mv zsh-5.8-linux-armv7l/* .
+fi
+
 rm $tarname
