@@ -52,12 +52,9 @@ else
   echo Install wget or curl
 fi
 
+# Note: the zsh-bin tarballs extract directly to bin/, share/ and man/
+# (no prefixed subdirectory), so no 'mv' step is needed here.
 tar -xzf $tarname
-if [[ $arch == x86_64* ]]; then
-mv zsh-5.8-linux-x86_64/* .
-elif  [[ $arch == arm* ]]; then
-mv zsh-5.8-linux-armv7l/* .
-fi
 
 # The ncurses embedded in the static zsh (zsh-bin) only reads terminfo
 # entries in unsuffixed hashed-bucket format (<dir>/<hex>/<term>), while
