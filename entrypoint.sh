@@ -72,6 +72,16 @@ export TMPDIR=$XDG_CACHE_HOME/tmp
 export TEMP=$TMPDIR
 mkdir -p $TMPDIR
 
+# The static zsh (zsh-bin) embeds an ncurses that only reads hashed-bucket
+# format terminfo dbs; system dbs (Debian/Ubuntu) use the letter layout and
+# are therefore invisible to it -> 0 terminfo capabilities (broken
+# backspace and arrow keys). Point it to the db shipped with zsh-bin,
+# made readable by build.sh. TERMINFO is probed first by ncurses, before
+# $HOME/.terminfo and the system directories.
+if [[ -d $CURRENT_DIR/zsh-bin/share/terminfo ]]; then
+  export TERMINFO="$CURRENT_DIR/zsh-bin/share/terminfo"
+fi
+
 if [[ $EXECUTE_COMMAND ]]; then
   if [[ $XXH_VERBOSE == '1' || $XXH_VERBOSE == '2' ]]; then
     echo Execute command: $EXECUTE_COMMAND

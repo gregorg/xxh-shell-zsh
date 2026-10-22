@@ -59,4 +59,14 @@ elif  [[ $arch == arm* ]]; then
 mv zsh-5.8-linux-armv7l/* .
 fi
 
+# The ncurses embedded in the static zsh (zsh-bin) only reads terminfo
+# entries in unsuffixed hashed-bucket format (<dir>/<hex>/<term>), while
+# the db shipped with zsh-bin uses '.zsh-bin' suffixed buckets
+# (e.g. 78.zsh-bin/xterm-256color). Without this rename, zle gets NO
+# terminfo capabilities -> broken backspace/arrow keys in xxh sessions.
+for d in share/terminfo/*.zsh-bin; do
+  [ -e "$d" ] || continue
+  mv "$d" "${d%.zsh-bin}"
+done
+
 rm $tarname
